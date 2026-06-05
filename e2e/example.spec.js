@@ -9,11 +9,15 @@ test.describe(`user rides`, async () => {
   test('user should be able to ride', async ({ page }) => {
     await page.getByRole('link', { name: 'Choose Roba Swings' }).click();
     await page.getByLabel('Amount of people').selectOption('2');
+    /*await page.waitForTimeout(500); // adicionado para checar o erro que acontecia ao executar o yarn e2e
     await page.getByRole('button', { name: 'Next' }).click();
-
-    expect(page.url()).toContain(`success`);
+    expect(page.url()).toContain(`success`);*/
+    await expect(async () => {
+      await page.getByRole('button', { name: 'Next' }).click();
+      await expect(page).toHaveURL(/#success/, { timeout: 1000 });
+    }).toPass(); // Tenta novamente o clique até a navegação ocorrer pois o form pode nao ser apresentado no primeiro momento
   });
-
+  
   test('user above height should not be allowed', async ({ page }) => {
     await page
       .getByRole('link', { name: 'Choose Robo Coaster Of Doom' })
