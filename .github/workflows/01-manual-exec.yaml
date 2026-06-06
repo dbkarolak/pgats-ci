@@ -15,7 +15,14 @@ jobs:
     #nome do job
     e2e-tests:
         # maquina onde o job vai rodar
-        runs-on: ubuntu-latest
+        # mudando de runs-on: ubuntu-latest para o self-hosted runner registrado no Linux local
+        runs-on: [self-hosted, Linux, X64, docker, playwright]
+
+        # container temporário onde os steps serão executados
+        # o runner local cria o container, executa os steps e remove ao final
+        container:
+        # utilizando a imagem com playwright pre configurado, mas nao precisar instalar manualmente via workflow
+            image: mcr.microsoft.com/playwright:v1.60.0-noble
 
         # passos do job
         steps:
@@ -36,8 +43,8 @@ jobs:
               run: yarn
             
             # instalação dos Browsers do Playwright
-            - name: Instalando Browsers do Playwright
-              run: yarn playwright install
+            #- name: Instalando Browsers do Playwright
+            #  run: yarn playwright install
             
             # executar os testes e2e
             - name: Executando testes e2e
