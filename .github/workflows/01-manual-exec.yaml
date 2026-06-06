@@ -41,4 +41,16 @@ jobs:
             
             # executar os testes e2e
             - name: Executando testes e2e
-              run: yarn run e2e
+              run: yarn run e2e --reporter=html
+
+            # publicar o relatório HTML como artefato da execução
+            # action escolhida no Marketplace: actions/upload-artifact
+            # essa action permite anexar arquivos gerados pela pipeline, como relatórios de testes
+            # if: always() garante que o relatório será publicado mesmo se algum teste falhar
+            - name: Publicando relatório HTML dos testes
+              uses: actions/upload-artifact@v7.0.1
+              if: always()
+              with:
+                  name: playwright-report
+                  path: playwright-report/
+                  retention-days: 7
